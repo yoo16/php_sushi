@@ -25,15 +25,5 @@ INSERT INTO products (name, price, image, category_id) VALUES
 ('あおさみそ汁', 120, 'images/products/aosa_misosiru.png', 7);
 ('カリカリポテト', 220, 'images/products/kari_poteto.png', 7);
 
-INSERT INTO seats (number, status)
-VALUES 
-    (1, 'vacant'),
-    (2, 'vacant'),
-    (3, 'vacant'),
-    (4, 'vacant'),
-    (5, 'vacant'),
-    (6, 'vacant'),
-    (7, 'vacant'),
-    (8, 'vacant'),
-    (9, 'vacant'),
-    (10, 'vacant');
+INSERT INTO seats (number)
+VALUES (1), (2), (3), (4), (5), (6), (7), (8), (9), (10);

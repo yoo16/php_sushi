@@ -13,7 +13,7 @@
 
         <div class="mb-4 text-right">
             <a href="create.php" class="bg-sky-600 text-white px-4 py-2 rounded hover:bg-sky-700">
-                ➕ カテゴリ追加
+                カテゴリ追加
             </a>
         </div>
 
