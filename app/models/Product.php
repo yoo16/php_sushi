@@ -98,7 +98,7 @@ class Product
      * @param array $data 登録する投稿データ
      * @return mixed 登録成功時は投稿ID、失敗時は null
      */
-    public function insert($user_id, $data)
+    public function insert($data)
     {
         try {
             $data['image_path'] = $this->uploadImage();
