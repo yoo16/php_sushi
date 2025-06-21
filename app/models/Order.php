@@ -29,7 +29,8 @@ class Order
     public function add($data)
     {
         try {
-            $sql = "INSERT INTO orders (seat_id, product_id, quantity) VALUES (:seat_id, :product_id, :quantity)";
+            $sql = "INSERT INTO orders (visit_id, product_id, price, quantity) 
+                    VALUES (:visit_id, :product_id, :price, :quantity)";
             $stmt = $this->pdo->prepare($sql);
             return $stmt->execute($data);
         } catch (PDOException $e) {

@@ -1,7 +1,7 @@
 "use strict";
 
 const TAX_RATE = 1.1; // 税率10%
-const order = {};
+const orders = {};
 const categoryTabs = document.getElementById("category-tabs");
 const menuArea = document.getElementById("menu-area");
 const orderList = document.getElementById("order-list");
@@ -122,14 +122,47 @@ function updateQuantity(change) {
     modal.dataset.quantity = current;
 }
 
-function confirmOrder() {
+async function confirmOrder() {
     const productId = parseInt(modal.dataset.productId);
-    const quantity = parseInt(modal.dataset.quantity);
     const product = products.find(item => item.id === productId);
-    if (!order[product.id]) {
-        order[product.id] = { name: product.name, image: product.image_path, price: product.price, count: 0 };
+
+    const visit_id = document.getElementById("visit").dataset.id;
+    const quantity = parseInt(modal.dataset.quantity);
+    const price = product.price;
+
+    if (!orders[product.id]) {
+        orders[product.id] = { 
+            name: product.name, 
+            image: product.image_path, 
+            price: price, 
+            count: 0 
+        };
     }
-    order[product.id].count += quantity;
+    orders[product.id].count += quantity;
+
+    const data = {
+        visit_id,
+        product_id: product.id,
+        quantity,
+        price,
+    };
+    try {
+        const res = await fetch("api/order/add.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        const resData = await res.json();
+        console.log("注文データ", data);
+        console.log("注文結果", resData);
+    } catch (err) {
+        console.error("注文の送信失敗", err);
+        alert("注文の送信に失敗しました。もう一度お試しください。");
+        return;
+    }
+
     closeModal();
     renderOrder();
 }
@@ -138,8 +171,8 @@ function renderOrder() {
     orderList.innerHTML = "";
     let total = 0;
 
-    for (const id in order) {
-        const product = order[id];
+    for (const id in orders) {
+        const product = orders[id];
         total += product.price * product.count;
 
         const li = document.createElement("li");
@@ -159,6 +192,3 @@ function renderOrder() {
 
 loadMenu();
 
-document.addEventListener("DOMContentLoaded", () => {
-    modalOverlay.addEventListener("click", closeModal);
-});
