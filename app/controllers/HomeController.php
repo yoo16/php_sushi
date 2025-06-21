@@ -9,16 +9,21 @@ class HomeController
      *
      * @return void
      */
-    public function index()
+    public function top()
     {
-        // ビューを読み込む
         require APP_DIR . 'views/home/index.php';
     }
 
     public function menu()
     {
-        // ビューを読み込む
+        if (isset($_GET['seat'])) {
+            $_SESSION['seat'] = $_GET['seat'];
+        }
+        $seat = $_SESSION['seat'] ?? null;
+        if (!$seat) {
+            header('Location: ./');
+            exit;
+        }
         require APP_DIR . 'views/home/menu.php';
     }
-
 }
