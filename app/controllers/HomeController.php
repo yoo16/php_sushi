@@ -2,25 +2,43 @@
 
 namespace App\Controllers;
 
+use App\Models\Seat;
+
 class HomeController
 {
-    /**
-     * 管理画面のトップページを表示
-     *
-     * @return void
-     */
     public function top()
     {
-        require APP_DIR . 'views/home/index.php';
+        $seatModel = new Seat();
+        $seats = $seatModel->get();
+
+        require APP_DIR . 'views/home/top.php';
+    }
+
+    public function reserve()
+    {
+        // セッションに座席IDを保存
+        $seat_id = $_POST['seat_id'] ?? null;
+        if (!isset($seat_id)) {
+            header('Location: top.php');
+            exit;
+        }
+
+        $seatModel = new Seat();
+        $seat = $seatModel->find($seat_id);
+        if ($seatModel->reserved($seat_id)) {
+            $_SESSION['seat'] = $seat;
+            header('Location: menu.php?seat_id=' . $seat_id);
+            exit;
+        }
+
+        header('Location: top.php');
+        exit;
     }
 
     public function menu()
     {
-        if (isset($_GET['seat'])) {
-            $_SESSION['seat'] = $_GET['seat'];
-        }
         $seat = $_SESSION['seat'] ?? null;
-        if (!$seat) {
+        if (!isset($seat['id'])) {
             header('Location: ./');
             exit;
         }

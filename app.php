@@ -28,6 +28,7 @@ require_once LIB_DIR . 'File.php';
 // モデルクラスの読み込み
 require_once APP_DIR . 'models/Product.php';
 require_once APP_DIR . 'models/Category.php';
+require_once APP_DIR . 'models/Seat.php';
 
 // コントローラークラスの読み込み
 require_once APP_DIR . 'controllers/HomeController.php';

@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-sky-50 text-gray-800 p-4">
-    <h1 class="text-2xl font-bold mb-6 text-center p-4"><?= SITE_TITLE ?></h1>
+    <h1 class="text-2xl font-bold mb-6 text-center p-4"><?= SITE_TITLE ?> (<?= $seat['number'] ?>番テーブル)</h1>
 
     <!-- モーダル -->
     <div id="modal" class="hidden fixed inset-0 bg-white flex z-50">
@@ -27,7 +27,7 @@
         <!-- 右側：注文 -->
         <div class="w-full md:w-72 bg-white p-4 rounded shadow">
             <h2 class="text-center text-xl font-semibold mb-2">
-                注文履歴 (<?= $seat ?>番)
+                注文履歴
             </h2>
             <ul id="order-list" class="mb-4 space-y-1"></ul>
             <div id="total" class="my-2 text-right text-lg">合計：¥0</div>

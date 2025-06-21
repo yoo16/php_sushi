@@ -24,9 +24,6 @@
                         <span class="text-lg"><?= htmlspecialchars($category['name']) ?></span>
                         <div class="space-x-2">
                             <a href="edit.php?id=<?= $category['id'] ?>" class="text-blue-600 hover:underline">編集</a>
-                            <a href="delete.php?id=<?= $category['id'] ?>"
-                                onclick="return confirm('本当に削除しますか？');"
-                                class="text-red-600 hover:underline">削除</a>
                         </div>
                     </li>
                 <?php endforeach; ?>
