@@ -4,19 +4,29 @@ namespace App\Controllers\Admin;
 require_once __DIR__ . '/../../../app.php';
 
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductController
 {
     private $productModel;
+    private $categoryModel;
 
     public function __construct()
     {
         $this->productModel = new Product();
+        $this->categoryModel = new Category();
     }
 
+    /**
+     * 商品一覧の表示
+     * 
+     * @return void
+     */
     public function index()
     {
         $products = $this->productModel->get();
+        $category_names = $this->categoryModel->map();
+
         require __DIR__ . '/../../views/admin/product/index.php';
     }
 

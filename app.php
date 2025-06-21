@@ -30,6 +30,7 @@ require_once APP_DIR . 'models/Product.php';
 require_once APP_DIR . 'models/Category.php';
 
 // コントローラークラスの読み込み
+require_once APP_DIR . 'controllers/HomeController.php';
 require_once APP_DIR . 'controllers/admin/CategoryController.php';
 require_once APP_DIR . 'controllers/admin/ProductController.php';
 

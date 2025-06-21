@@ -31,13 +31,20 @@ class Category
             $sql = "SELECT * FROM categories ORDER BY id ASC;";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
-            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $products;
+            $values = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $values;
         } catch (PDOException $e) {
             error_log($e->getMessage());
             echo ($e->getMessage());
             return null;
         }
+    }
+
+    public function map($key = "id", $column = "name")
+    {
+        $categories = $this->get();
+        $map = array_column($categories, $column, $key);
+        return $map;
     }
 
     /**
@@ -49,7 +56,7 @@ class Category
     public function find(int $id)
     {
         try {
-            $sql = "SELECT * FROM products WHERE id = :id";
+            $sql = "SELECT * FROM categories WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(['id' => $id]);
             $value = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -70,7 +77,7 @@ class Category
     public function insert($data)
     {
         try {
-            $sql = "INSERT INTO products (name, category_id, image_path) 
+            $sql = "INSERT INTO categories (name, category_id, image_path) 
                     VALUES (:name, :category_id, :image_path)";
 
             $stmt = $this->pdo->prepare($sql);
@@ -93,7 +100,7 @@ class Category
     public function delete($id)
     {
         try {
-            $sql = "DELETE FROM products WHERE id = :id";
+            $sql = "DELETE FROM categories WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             return $stmt->execute(['id' => $id]);
         } catch (PDOException $e) {
