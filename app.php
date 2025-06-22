@@ -1,10 +1,10 @@
 <?php
-// 設定ファイルを読み込み
-require_once "env.php";
-
 // セッション開始
 session_start();
-session_regenerate_id(true);
+// session_regenerate_id(true);
+
+// 設定ファイルを読み込み
+require_once "env.php";
 
 // アプリケーションのルートディレクトリパス
 const BASE_DIR = __DIR__;

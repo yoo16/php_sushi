@@ -199,8 +199,8 @@ function renderOrder() {
         li.innerHTML = `
         <div class="flex justify-start items-center mb-2">
             <img src="${order.product_image_path}" alt="${order.product_name}" class="w-16 m-2">
-            <p>${order.product_name}</p>
-            <span class="ml-auto">${order.quantity}</span>
+            <div class="font-bold">${order.product_name}</div>
+            <span class="ml-auto p-2 text-white bg-sky-500 rounded">${order.quantity}</span>
         </div>
         `;
         orderList.appendChild(li);
