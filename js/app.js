@@ -1,6 +1,6 @@
 "use strict";
 
-const TAX_RATE = 1.1; // 税率10%
+const TAX_RATE = 1.1;
 const categoryTabs = document.getElementById("category-tabs");
 const menuArea = document.getElementById("menu-area");
 const productArea = document.getElementById("product-area");
@@ -57,11 +57,10 @@ async function addOrder(order) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(order)
         });
-        const resData = await res.json();
-        console.log("注文データ", data);
-        console.log("注文結果", resData);
+        const data = await res.json();
+        console.log("注文結果", data);
     } catch (err) {
         console.error("注文の送信失敗", err);
         alert("注文の送信に失敗しました。もう一度お試しください。");
@@ -185,6 +184,7 @@ async function confirmOrder() {
         product_id,
         quantity,
     };
+    console.log("注文データ", data);
     await addOrder(data);
 
     closeModal();
@@ -200,7 +200,7 @@ function renderOrder() {
         <div class="flex justify-start items-center mb-2">
             <img src="${order.product_image_path}" alt="${order.product_name}" class="w-16 m-2">
             <div class="font-bold">${order.product_name}</div>
-            <span class="ml-auto p-2 text-white bg-sky-500 rounded">${order.quantity}</span>
+            <span class="ml-auto px-3 py-1 text-white bg-green-500 rounded">${order.quantity}</span>
         </div>
         `;
         orderList.appendChild(li);

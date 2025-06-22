@@ -9,9 +9,7 @@
 </head>
 
 <body class="bg-sky-50 text-gray-800 p-4">
-    <h1 class="text-2xl font-bold mb-6 text-center p-4">
-        <?= SITE_TITLE ?>
-    </h1>
+    <h1 class="text-2xl font-bold text-center p-4"><?= SITE_TITLE ?></h1>
     <div id="visit" data-id="<?= $visit_id ?>" class="text-right mb-4">
         <?= $seat['number'] ?>番テーブル
         (
@@ -39,9 +37,9 @@
             <h2 class="text-center text-xl font-semibold mb-2">注文履歴</h2>
             <ul id="order-list" class="mb-4 space-y-1"></ul>
             <div id="total" class="my-2 text-right text-lg">合計：¥0</div>
-            <button class="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded" onclick="">
+            <a href="./chekout.php" class="block bg-sky-600 text-white px-6 py-3 rounded text-lg text-center hover:bg-sky-700 transition">
                 お会計
-            </button>
+            </a>
         </div>
     </div>
 

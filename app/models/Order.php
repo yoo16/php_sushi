@@ -64,4 +64,22 @@ class Order
             return false;
         }
     }
+
+    /**
+     * 合計金額を計算
+     *
+     * @param int $visit_id
+     * @return int 
+     */
+    public function total($visit_id) {
+        $orders = $this->fetchByVisitId($visit_id);
+        if (!$orders) {
+            return 0;
+        }
+
+        return array_reduce($orders, function ($sum, $order) {
+            return $sum + ($order['price'] * $order['quantity']);
+        }, 0);
+    }
+
 }

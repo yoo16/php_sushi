@@ -8,6 +8,8 @@ use Database;
 
 class Visit
 {
+    // status: 'seated', 'billed', 'paid'
+
     private $pdo;
 
     public function __construct()
@@ -15,6 +17,11 @@ class Visit
         $this->pdo = Database::getInstance();
     }
 
+    /**
+     * 指定されたIDの来店セッションを取得
+     * @param int $id
+     * @return array|null
+     */
     public function find($id)
     {
         try {
@@ -28,11 +35,16 @@ class Visit
         }
     }
 
+    /**
+     * 指定された席IDの来店セッションが存在するかチェック
+     * @param int $seatId
+     * @return array|false
+     */
     public function exists($seatId)
     {
         try {
             // まだ「未会計」のセッションが存在するかチェック
-            $sql = "SELECT * FROM visits WHERE seat_id = :seat_id AND status != 'paid'";
+            $sql = "SELECT * FROM visits WHERE seat_id = :seat_id AND status != 'billed'";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(['seat_id' => $seatId]);
             $existing = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -62,4 +74,51 @@ class Visit
             return null;
         }
     }
+
+    /**
+     * 会計済みのセッションを更新する
+     * 
+     * @param int $visitId
+     * @param float $total
+     * @return bool
+     */
+    public function billed($visitId, $total)
+    {
+        try {
+            // 税込み価格を計算
+            $total_with_tax = (int)($total * TAX_RATE);
+
+            $sql = "UPDATE visits 
+                SET status = 'billed', total = :total, total_with_tax = :total_with_tax 
+                WHERE id = :id";
+            $stmt = $this->pdo->prepare($sql);
+            return $stmt->execute([
+                'total' => $total,
+                'total_with_tax' => $total_with_tax,
+                'id'    => $visitId,
+            ]);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * 支払い済みのセッションを更新する
+     * 
+     * @param int $visitId
+     * @return bool
+     */
+    public function paid($visitId)
+    {
+        try {
+            $sql = "UPDATE visits SET status = 'paid' WHERE id = :id";
+            $stmt = $this->pdo->prepare($sql);
+            return $stmt->execute(['id' => $visitId,]);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
 }

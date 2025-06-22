@@ -6,6 +6,8 @@ session_start();
 // 設定ファイルを読み込み
 require_once "env.php";
 
+const TAX_RATE = 0.1; // 消費税率
+
 // アプリケーションのルートディレクトリパス
 const BASE_DIR = __DIR__;
 // app/ ディレクトリパス
