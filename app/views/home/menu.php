@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>回転寿司 注文アプリ</title>
+    <title><?= SITE_TITLE ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-sky-50 text-gray-800 p-4">
-    <h1 class="text-2xl font-bold text-center p-4"><?= SITE_TITLE ?></h1>
+    <h1 class="text-2xl font-bold text-center p-4">
+        <a href="./"><?= SITE_TITLE ?></a>
+    </h1>
     <div id="visit" data-id="<?= $visit_id ?>" class="text-right mb-4">
         <?= $seat['number'] ?>番テーブル
         (

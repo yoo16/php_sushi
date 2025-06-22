@@ -9,6 +9,9 @@ class HomeController
 {
     public function __construct() {}
 
+    /**
+     * トップページ表示（座席選択）
+     */
     public function top()
     {
         $seatModel = new Seat();
@@ -16,6 +19,9 @@ class HomeController
         require APP_DIR . 'views/home/top.php';
     }
 
+    /**
+     * 座席予約
+     */
     public function reserve()
     {
         // セッションに座席IDを保存
@@ -38,6 +44,9 @@ class HomeController
         header("Location: menu.php");
     }
 
+    /**
+     * メニュー表示
+     */
     public function menu()
     {
         $visit_id = $_SESSION['visit_id'] ?? null;
@@ -54,6 +63,9 @@ class HomeController
         require APP_DIR . 'views/home/menu.php';
     }
 
+    /**
+     * お会計確認画面
+     */
     public function checkout()
     {
         $visit_id = $_SESSION['visit_id'] ?? null;
@@ -79,6 +91,9 @@ class HomeController
         require APP_DIR . 'views/home/checkout.php';
     }
 
+    /**
+     * 請求処理
+     */
     public function billed()
     {
         $visit_id = $_SESSION['visit_id'] ?? null;
@@ -101,9 +116,12 @@ class HomeController
         }
     }
 
+    /**
+     * 完了画面
+     */
     public function complete()
     {
-        // 完了画面を表示
+        // 座席セッションをクリア
         unset($_SESSION['visit_id']);
         require APP_DIR . 'views/home/complete.php';
     }

@@ -15,7 +15,7 @@
             <div class="text-green-700 mb-6">
                 <form action="reserve.php" method="post">
                     <select name="seat_id" id="seat_id"
-                        class="border border-gray-300 text-gray-900 text-lg rounded-lg p-2.5">
+                        class="border border-gray-300 text-gray-900 text-lg rounded-lg px-6 py-2">
                         <?php foreach ($seats as $seat): ?>
                             <option value="<?= $seat['id'] ?>">
                                 <?= $seat['number'] ?>
@@ -24,7 +24,7 @@
                     </select>
                     <div class="mt-4">
                         <button class="inline-block bg-green-600 hover:bg-green-700 text-white text-lg font-semibold px-6 py-3 rounded shadow">
-                            注文をはじめる
+                            座席決定
                         </button>
                     </div>
                 </form>
