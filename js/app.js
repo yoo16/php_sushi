@@ -1,7 +1,6 @@
 "use strict";
 
 const TAX_RATE = 1.1; // 税率10%
-const orders = {};
 const categoryTabs = document.getElementById("category-tabs");
 const menuArea = document.getElementById("menu-area");
 const productArea = document.getElementById("product-area");
@@ -11,9 +10,12 @@ const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modal-content");
 const modalOverlay = document.getElementById("modal-overlay");
 
+let total = 0;
+let orders = [];
 let products = [];
 let categories = [];
 let currentCategory = "";
+let visit_id = document.getElementById("visit").dataset.id;
 
 async function fetchCategories() {
     try {
@@ -39,16 +41,35 @@ async function fetchProducts() {
 
 async function fetchOrders() {
     try {
-        const res = await fetch(`api/order/get.php?visit_id=${visit_id}`);
+        const res = await fetch(`api/order/fetch.php?visit_id=${visit_id}`);
         const data = await res.json();
-        return data.orders || {};
+        total = data.total || 0;
+        orders = data.orders || [];
     } catch (err) {
         console.error("注文の取得失敗", err);
     }
 }
 
+async function addOrder(order) {
+    try {
+        const res = await fetch("api/order/add.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        const resData = await res.json();
+        console.log("注文データ", data);
+        console.log("注文結果", resData);
+    } catch (err) {
+        console.error("注文の送信失敗", err);
+        alert("注文の送信に失敗しました。もう一度お試しください。");
+        return;
+    }
+}
 
-async function loadMenu() {
+async function loadProducts() {
     try {
         categories = await fetchCategories();
         // 初期カテゴリーを設定
@@ -60,6 +81,15 @@ async function loadMenu() {
         renderMenu(currentCategory);
     } catch (err) {
         console.error("メニューの読み込み失敗", err);
+    }
+}
+
+async function loadOrders() {
+    try {
+        await fetchOrders();
+        renderOrder();
+    } catch (err) {
+        console.error("注文の読み込み失敗", err);
     }
 }
 
@@ -146,72 +176,39 @@ function updateQuantity(change) {
 }
 
 async function confirmOrder() {
-    const productId = parseInt(modal.dataset.productId);
-    const product = products.find(item => item.id === productId);
-
     const visit_id = document.getElementById("visit").dataset.id;
+    const product_id = parseInt(modal.dataset.productId);
     const quantity = parseInt(modal.dataset.quantity);
-    const price = product.price;
-
-    if (!orders[product.id]) {
-        orders[product.id] = { 
-            name: product.name, 
-            image: product.image_path, 
-            price: price, 
-            count: 0 
-        };
-    }
-    orders[product.id].count += quantity;
 
     const data = {
         visit_id,
-        product_id: product.id,
+        product_id,
         quantity,
-        price,
     };
-    try {
-        const res = await fetch("api/order/add.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-        const resData = await res.json();
-        console.log("注文データ", data);
-        console.log("注文結果", resData);
-    } catch (err) {
-        console.error("注文の送信失敗", err);
-        alert("注文の送信に失敗しました。もう一度お試しください。");
-        return;
-    }
+    await addOrder(data);
 
     closeModal();
-    renderOrder();
+    loadOrders();
 }
 
 function renderOrder() {
     orderList.innerHTML = "";
-    let total = 0;
 
-    for (const id in orders) {
-        const product = orders[id];
-        total += product.price * product.count;
-
+    orders.forEach(order => {
         const li = document.createElement("li");
         li.innerHTML = `
         <div class="flex justify-start items-center mb-2">
-            <img src="${product.image}" alt="${product.name}" class="w-16 m-2">
-            <p>${product.name}</p>
-            <span class="ml-auto">${product.count}</span>
+            <img src="${order.product_image_path}" alt="${order.product_name}" class="w-16 m-2">
+            <p>${order.product_name}</p>
+            <span class="ml-auto">${order.quantity}</span>
         </div>
         `;
         orderList.appendChild(li);
-    }
+    });
 
     const totalWithTax = Math.round(total * TAX_RATE);
     totalDisplay.textContent = `合計：${total}円（税込${totalWithTax}円）`;
 }
 
-loadMenu();
-
+loadProducts();
+loadOrders();

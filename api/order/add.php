@@ -3,22 +3,15 @@
 require_once '../../app.php';
 
 use App\Models\Order;
+use App\Models\Product;
 
 header("Content-Type: application/json");
-
-// POST 以外は拒否
-// if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-//     http_response_code(405);
-//     echo json_encode(["error" => "Method Not Allowed"]);
-//     exit;
-// }
 
 // JSONデータを取得してデコード
 $input = json_decode(file_get_contents("php://input"), true);
 $productId = $input['product_id'] ?? null;
 $quantity = $input['quantity'] ?? null;
 $visitId = $input['visit_id'] ?? null;
-$price = $input['price'] ?? null;
 
 if (!$productId || !$quantity || !$visitId) {
     http_response_code(400);
@@ -26,11 +19,15 @@ if (!$productId || !$quantity || !$visitId) {
     exit;
 }
 
+$productModel = new Product();
+$product = $productModel->find($productId);
+$price = $product['price'];
+
 $data = [
     'visit_id'   => $visitId,
     'product_id' => $productId,
-    'price'   => $price,
     'quantity'   => $quantity,
+    'price'   => $price,
 ];
 
 $orderModel = new Order();

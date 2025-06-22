@@ -26,7 +26,17 @@ class Order
     public function fetchByVisitId($visit_id)
     {
         try {
-            $sql = "SELECT * FROM orders WHERE visit_id = :visit_id";
+            $sql = "SELECT 
+                        orders.id,
+                        orders.visit_id,
+                        orders.product_id,
+                        orders.quantity,
+                        orders.price,
+                        products.name AS product_name,
+                        products.image_path AS product_image_path
+                    FROM orders 
+                    JOIN products ON orders.product_id = products.id    
+                    WHERE visit_id = :visit_id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(['visit_id' => $visit_id]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
