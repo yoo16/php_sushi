@@ -4,6 +4,7 @@ const TAX_RATE = 1.1; // 税率10%
 const orders = {};
 const categoryTabs = document.getElementById("category-tabs");
 const menuArea = document.getElementById("menu-area");
+const productArea = document.getElementById("product-area");
 const orderList = document.getElementById("order-list");
 const totalDisplay = document.getElementById("total");
 const modal = document.getElementById("modal");
@@ -14,18 +15,46 @@ let products = [];
 let categories = [];
 let currentCategory = "";
 
+async function fetchCategories() {
+    try {
+        const res = await fetch("api/category/fetch.php");
+        const data = await res.json();
+        return data.categories || [];
+    } catch (err) {
+        console.error("カテゴリデータの取得失敗", err);
+        return [];
+    }
+}
+
+async function fetchProducts() {
+    try {
+        const res = await fetch("api/product/fetch.php");
+        const data = await res.json();
+        return data.products || [];
+    } catch (err) {
+        console.error("商品データの取得失敗", err);
+        return [];
+    }
+}
+
+async function fetchOrders() {
+    try {
+        const res = await fetch(`api/order/get.php?visit_id=${visit_id}`);
+        const data = await res.json();
+        return data.orders || {};
+    } catch (err) {
+        console.error("注文の取得失敗", err);
+    }
+}
+
+
 async function loadMenu() {
     try {
-        const res = await fetch("api/products/get.php");
-        const data = await res.json();
-
-        products = data.products;
-        console.log("products", products);
-
-        categories = data.categories;
-
+        categories = await fetchCategories();
+        // 初期カテゴリーを設定
         currentCategory = categories[0];
-        console.log("currentCategory", currentCategory);
+
+        products = await fetchProducts();
 
         renderCategoryTabs(categories);
         renderMenu(currentCategory);
@@ -57,15 +86,11 @@ function priceWithTax(price) {
 }
 
 function renderMenu(category) {
-    console.log("renderMenu", category);
-    menuArea.innerHTML = "";
+    // 商品をフィルタリング
+    const filterProducts = products.filter(item => item.category_id === category.id);
 
-    const items = products.filter(item => item.category_id === category.id);
-    const grid = document.createElement("div");
-    grid.className = "grid grid-cols-1 sm:grid-cols-3 gap-1";
-
-    items.forEach(product => {
-        console.log("product", product);
+    productArea.innerHTML = "";
+    filterProducts.forEach(product => {
         const card = document.createElement("div");
         card.innerHTML = `
         <div class="bg-white rounded shadow p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition-all" 
@@ -79,10 +104,8 @@ function renderMenu(category) {
             <button class="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded">注文</button>
         </div>
         `;
-        grid.appendChild(card);
+        productArea.appendChild(card);
     });
-
-    menuArea.appendChild(grid);
 }
 
 function openModal(productId) {

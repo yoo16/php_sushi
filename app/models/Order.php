@@ -21,6 +21,22 @@ class Order
     }
 
     /**
+     * 訪問IDで注文を取得
+     */
+    public function fetchByVisitId($visit_id)
+    {
+        try {
+            $sql = "SELECT * FROM orders WHERE visit_id = :visit_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['visit_id' => $visit_id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return null;
+        }
+    }   
+
+    /**
      * 注文を追加
      *
      * @param array $orderData 注文データの連想配列

@@ -23,7 +23,7 @@ class Seat
      *
      * @return array|null 座席データの連想配列、もしくは該当する座席がなければ null
      */
-    public function get()
+    public function fetch()
     {
         try {
             $sql = "SELECT * FROM seats ORDER BY id ASC;";

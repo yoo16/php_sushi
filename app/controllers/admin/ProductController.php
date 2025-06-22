@@ -24,7 +24,7 @@ class ProductController
      */
     public function index()
     {
-        $products = $this->productModel->get();
+        $products = $this->productModel->fetch();
         $category_names = $this->categoryModel->map();
 
         require __DIR__ . '/../../views/admin/product/index.php';

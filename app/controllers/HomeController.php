@@ -10,8 +10,7 @@ class HomeController
     public function top()
     {
         $seatModel = new Seat();
-        $seats = $seatModel->get();
-
+        $seats = $seatModel->fetch();
         require APP_DIR . 'views/home/top.php';
     }
 

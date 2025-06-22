@@ -16,7 +16,7 @@ class CategoryController
 
     public function index()
     {
-        $categories = $this->categoryModel->get();
+        $categories = $this->categoryModel->fetch();
         require __DIR__ . '/../../views/admin/category/index.php';
     }
 

@@ -30,7 +30,9 @@
 
     <div class="flex flex-col md:flex-row gap-6">
         <!-- 左側：メニュー -->
-        <div class="flex-1" id="menu-area"></div>
+        <div class="flex-1" id="menu-area">
+            <div id="product-area" class="grid grid-cols-1 sm:grid-cols-3 gap-1"></div>
+        </div>
 
         <!-- 右側：注文 -->
         <div class="w-full md:w-72 bg-white p-4 rounded shadow">

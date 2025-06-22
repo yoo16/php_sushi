@@ -25,7 +25,7 @@ class Category
      *
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function get()
+    public function fetch()
     {
         try {
             $sql = "SELECT * FROM categories ORDER BY id ASC;";
@@ -42,7 +42,7 @@ class Category
 
     public function map($key = "id", $column = "name")
     {
-        $categories = $this->get();
+        $categories = $this->fetch();
         $map = array_column($categories, $column, $key);
         return $map;
     }

@@ -26,7 +26,7 @@ class Product
      *
      * @return array|null 投稿データの連想配列、もしくは該当する投稿がなければ null
      */
-    public function get($limit = 50)
+    public function fetch($limit = 50)
     {
         try {
             $sql = "SELECT * FROM products LIMIT :limit;";
@@ -48,7 +48,7 @@ class Product
      * @param int $category_id カテゴリーID
      * @return array|null 
      */
-    public function getByCategoryId($category_id, $limit = 50)
+    public function fetchByCategoryId($category_id, $limit = 50)
     {
         try {
             $sql = "SELECT * FROM products 
