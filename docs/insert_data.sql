@@ -7,7 +7,7 @@ INSERT INTO categories (name, sort_order) VALUES
 ('軍艦巻き', 6),
 ('サイドメニュー', 7);
 
-INSERT INTO products (name, price, image, category_id) VALUES
+INSERT INTO products (name, price, image_path, category_id) VALUES
 ('まぐろ', 100, 'images/products/maguro.png', 1),
 ('本鮪中とろ', 160, 'images/products/chu_tro.png', 1),
 ('とろびんちょう', 100, 'images/products/toro_bincho.png', 1),
