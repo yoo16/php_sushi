@@ -21,8 +21,8 @@ INSERT INTO products (name, price, image_path, category_id) VALUES
 ('えび', 100, 'images/products/ebi.png', 3),
 ('甘えび', 100, 'images/products/ama_ebi.png', 3),
 ('アカイカ', 160, 'images/products/aka_ika.png', 5),
-('かつおだしの茶碗蒸し', 190, 'images/products/tyawan_musi.png', 7);
-('あおさみそ汁', 120, 'images/products/aosa_misosiru.png', 7);
+('かつおだしの茶碗蒸し', 190, 'images/products/tyawan_musi.png', 7),
+('あおさみそ汁', 120, 'images/products/aosa_misosiru.png', 7),
 ('カリカリポテト', 220, 'images/products/kari_poteto.png', 7);
 
 INSERT INTO seats (number)

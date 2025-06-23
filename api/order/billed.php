@@ -1,7 +1,15 @@
 <?php
+require_once "../../app.php";
+
 use App\Models\Order;
 use App\Models\Visit;
 
+$visit_id = $_GET['visit_id'] ?? null;
+if (!$visit_id) {
+    http_response_code(400);
+    echo json_encode(["error" => "Missing visit_id"]);
+    exit;
+}
 $orderModel = new Order();
 $total = $orderModel->total($visit_id);
 

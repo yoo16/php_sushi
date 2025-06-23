@@ -55,6 +55,18 @@ async function fetchProducts() {
     }
 }
 
+async function billed() {
+    try {
+        const uri = `api/order/billed.php?visit_id=${visit_id}`;
+        const res = await fetch(uri);
+        const data = await res.json();
+        return data.success;
+    } catch (err) {
+        console.error("会計処理の失敗", err);
+        return [];
+    }
+}
+
 function priceWithTax(price) {
     return Math.round(price * TAX_RATE);
 }
@@ -270,24 +282,14 @@ document.getElementById("checkout-button").addEventListener("click", (e) => {
     modal.classList.remove("hidden");
 });
 
-modalContent.addEventListener("click", (e) => {
+modalContent.addEventListener("click", async (e) => {
     const target = e.target;
-
     if (target && target.id === "confirm-checkout") {
-        // 注文確定処理
-        const visit_id = document.getElementById("visit").dataset.id;
-        const orderData = {
-            visit_id,
-            total: total,
-            orders: orders.map(order => ({
-                product_id: order.product_id,
-                quantity: order.quantity,
-            })),
-        };
-        
-
-        //会計ページに移動
-        window.location.href = "./complete.php";
+        const result = await billed();
+        alert(result)
+        if (result === true) {
+            window.location.href = "./complete.php";
+        }
     }
 });
 
