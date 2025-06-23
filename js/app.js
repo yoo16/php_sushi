@@ -28,6 +28,22 @@ async function fetchCategories() {
     }
 }
 
+async function fetchOrders() {
+    try {
+        const uri = `api/order/fetch.php?visit_id=${visit_id}`
+        const res = await fetch(uri);
+        const data = await res.json();
+
+        orders = data.orders || [];
+
+        console.log("注文の取得URI:", uri);
+        console.log("取得した注文データ:", orders);
+        return orders;
+    } catch (err) {
+        console.error("注文の取得失敗", err);
+    }
+}
+
 async function fetchProducts() {
     try {
         const res = await fetch("api/product/fetch.php");
@@ -39,32 +55,28 @@ async function fetchProducts() {
     }
 }
 
-async function fetchOrders() {
-    try {
-        const res = await fetch(`api/order/fetch.php?visit_id=${visit_id}`);
-        const data = await res.json();
-        total = data.total || 0;
-        orders = data.orders || [];
-    } catch (err) {
-        console.error("注文の取得失敗", err);
-    }
+function priceWithTax(price) {
+    return Math.round(price * TAX_RATE);
 }
 
 async function addOrder(order) {
+    console.log("注文を追加:", order);
+    // クライアント側で即時更新
+    orders.push(order);
+
     try {
         const res = await fetch("api/order/add.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(order)
+            body: JSON.stringify(order),
         });
         const data = await res.json();
-        console.log("注文結果", data);
+        return data.products || [];
     } catch (err) {
-        console.error("注文の送信失敗", err);
-        alert("注文の送信に失敗しました。もう一度お試しください。");
-        return;
+        console.error("商品データの取得失敗", err);
+        return [];
     }
 }
 
@@ -74,8 +86,10 @@ async function loadProducts() {
         // 初期カテゴリーを設定
         currentCategory = categories[0];
 
+        // 商品データ取得
         products = await fetchProducts();
 
+        // カテゴリータブとメニューをレンダリング
         renderCategoryTabs(categories);
         renderMenu(currentCategory);
     } catch (err) {
@@ -84,12 +98,12 @@ async function loadProducts() {
 }
 
 async function loadOrders() {
-    try {
-        await fetchOrders();
-        renderOrder();
-    } catch (err) {
-        console.error("注文の読み込み失敗", err);
-    }
+    // オーダーデータ取得
+    orders = await fetchOrders();
+    // 合計金額
+    total = orders.reduce((sum, order) => sum + (order.quantity * order.price), 0);
+    // 注文履歴をレンダリング
+    renderOrder();
 }
 
 function renderCategoryTabs(categories) {
@@ -110,10 +124,6 @@ function renderCategoryTabs(categories) {
     });
 }
 
-function priceWithTax(price) {
-    return Math.round(price * TAX_RATE);
-}
-
 function renderMenu(category) {
     // 商品をフィルタリング
     const filterProducts = products.filter(item => item.category_id === category.id);
@@ -123,7 +133,7 @@ function renderMenu(category) {
         const card = document.createElement("div");
         card.innerHTML = `
         <div class="bg-white rounded shadow p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition-all" 
-            onclick='openModal(${product.id})'>
+            onclick='openOrder(${product.id})'>
             <img src="${product.image_path}" alt="${product.name}" class="w-32 rounded mb-2">
             <h3 class="text-lg font-semibold">${product.name}</h3>
             <p class="text-lg text-gray-600 mb-2">
@@ -137,7 +147,7 @@ function renderMenu(category) {
     });
 }
 
-function openModal(productId) {
+function openOrder(productId) {
     const product = products.find(item => item.id === productId);
     modalContent.innerHTML = `
         <div class="p-4 text-2xl">
@@ -179,20 +189,29 @@ async function confirmOrder() {
     const product_id = parseInt(modal.dataset.productId);
     const quantity = parseInt(modal.dataset.quantity);
 
-    const data = {
-        visit_id,
-        product_id,
-        quantity,
-    };
-    console.log("注文データ", data);
-    await addOrder(data);
+    const product = products.find(p => p.id === product_id);
 
+    // クライアント側で即時更新
+    const order = {
+        product_id,
+        product_name: product.name,
+        product_image_path: product.image_path,
+        quantity,
+        visit_id,
+    };
+    await addOrder(order);
+
+    // 合計金額を加算（税抜き）
+    total += product.price * quantity;
+
+    // 即時に注文履歴表示を更新
+    renderOrder();
     closeModal();
-    loadOrders();
 }
 
 function renderOrder() {
     orderList.innerHTML = "";
+    if (orders.length === 0) return;
 
     orders.forEach(order => {
         const li = document.createElement("li");
@@ -209,6 +228,60 @@ function renderOrder() {
     const totalWithTax = Math.round(total * TAX_RATE);
     totalDisplay.textContent = `合計：${total}円（税込${totalWithTax}円）`;
 }
+
+document.getElementById("checkout-button").addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // 注文履歴HTML生成
+    const orderItemsHTML = orders.map(order => `
+        <div class="flex justify-between items-center border-b py-2">
+            <div>${order.product_name}</div>
+            <div class="text-gray-600">×${order.quantity}</div>
+        </div>
+    `).join("");
+
+    modalContent.innerHTML = `
+        <div class="w-1/2 mx-auto">
+            <h2 class="text-2xl font-bold text-center mb-4">はる寿司</h2>
+            <h2 class="text-2xl font-bold text-center mb-4">お会計</h2>
+
+            <div class="p-4 rounded mb-4">
+                <h3 class="text-lg font-semibold mb-2">注文履歴</h3>
+                <div class="space-y-2 max-h-60 overflow-y-auto">
+                    ${orderItemsHTML || '<p class="text-gray-500">注文はありません。</p>'}
+                </div>
+            </div>
+
+            <p class="text-center mb-6 text-lg">
+                合計：<span class="font-bold">${total}円（税込${Math.round(total * TAX_RATE)}円）</span>
+            </p>
+
+            <div class="text-center text-xl p-4 font-bold">この内容でお会計しますか？</div>
+            <div class="flex justify-center gap-4">
+                <button id="confirm-checkout" href="./complete.html" class="bg-sky-600 text-white px-6 py-3 rounded hover:bg-sky-700 transition">
+                    はい
+                </button>
+                <button onclick="closeModal()" class="border border-sky-500 text-sky-600 px-6 py-3 rounded hover:bg-sky-100 transition">
+                    いいえ
+                </button>
+            </div>
+        </div>
+    `;
+    modal.classList.remove("hidden");
+});
+
+modalContent.addEventListener("click", (e) => {
+    const target = e.target;
+
+    if (target && target.id === "confirm-checkout") {
+        //localStorageを削除
+        localStorage.removeItem("orders");
+        localStorage.removeItem("total");
+
+        //会計ページに移動
+        window.location.href = "./complete.html";
+    }
+});
 
 loadProducts();
 loadOrders();
