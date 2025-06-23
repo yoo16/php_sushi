@@ -258,7 +258,7 @@ document.getElementById("checkout-button").addEventListener("click", (e) => {
 
             <div class="text-center text-xl p-4 font-bold">この内容でお会計しますか？</div>
             <div class="flex justify-center gap-4">
-                <button id="confirm-checkout" href="./complete.html" class="bg-sky-600 text-white px-6 py-3 rounded hover:bg-sky-700 transition">
+                <button id="confirm-checkout" class="bg-sky-600 text-white px-6 py-3 rounded hover:bg-sky-700 transition">
                     はい
                 </button>
                 <button onclick="closeModal()" class="border border-sky-500 text-sky-600 px-6 py-3 rounded hover:bg-sky-100 transition">
@@ -274,12 +274,20 @@ modalContent.addEventListener("click", (e) => {
     const target = e.target;
 
     if (target && target.id === "confirm-checkout") {
-        //localStorageを削除
-        localStorage.removeItem("orders");
-        localStorage.removeItem("total");
+        // 注文確定処理
+        const visit_id = document.getElementById("visit").dataset.id;
+        const orderData = {
+            visit_id,
+            total: total,
+            orders: orders.map(order => ({
+                product_id: order.product_id,
+                quantity: order.quantity,
+            })),
+        };
+        
 
         //会計ページに移動
-        window.location.href = "./complete.html";
+        window.location.href = "./complete.php";
     }
 });
 
