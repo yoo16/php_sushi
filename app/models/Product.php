@@ -94,7 +94,6 @@ class Product
     /**
      * データをDBに登録する
      *
-     * @param int $user_id ユーザID
      * @param array $data 登録する投稿データ
      * @return mixed 登録成功時は投稿ID、失敗時は null
      */
@@ -111,6 +110,33 @@ class Product
             if ($result) {
                 return $this->pdo->lastInsertId();
             }
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+        }
+        return;
+    }
+
+        /**
+     * データをDBに登録する
+     *
+     * @param array $data
+     * @return mixed 登録成功時は投稿ID、失敗時は null
+     */
+    public function update($data)
+    {
+        try {
+            $data['image_path'] = $this->uploadImage();
+
+            $sql = "UPDATE products 
+                    SET name = :name, 
+                        category_id = :category_id,
+                        price = :price,
+                        image_path = :image_path
+                    WHERE id = :id";
+
+            $stmt = $this->pdo->prepare($sql);
+            $result = $stmt->execute($data);
+            return $result;
         } catch (PDOException $e) {
             error_log($e->getMessage());
         }
@@ -143,6 +169,7 @@ class Product
      */
     public function uploadImage()
     {
-        return File::upload(PRODUCTS_IMAGE_DIR);
+        $file_name = $_FILES['image']['name'];
+        return File::upload(PRODUCTS_IMAGE_DIR, $file_name, 'image');
     }
 }

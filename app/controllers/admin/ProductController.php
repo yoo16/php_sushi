@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers\Admin;
 
 require_once __DIR__ . '/../../../app.php';
@@ -37,28 +38,62 @@ class ProductController
      */
     public function create()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? '';
-            $category_id = $_POST['category_id'] ?? '';
-            $price = $_POST['price'] ?? 0;
-            $image = $_FILES['image'] ?? null;
-
-            $data = [
-                'name' => $name,
-                'category_id' => $category_id,
-                'price' => $price,
-                'image' => $image
-            ];
-
-            $id = $this->productModel->insert($data);
-            if ($id) {
-                header("Location: index.php?success=1");
-                exit;
-            } else {
-                echo "登録に失敗しました";
-            }
-        }
+        $categories = $this->categoryModel->fetch();
 
         require __DIR__ . '/../../views/admin/product/create.php';
+    }
+
+    /**
+     * 商品の登録処理
+     * 
+     * @return void
+     */
+    public function edit()
+    {
+        $id = $_GET['id'] ?? null;
+        $product = $this->productModel->find($id);
+        if (!$product) {
+            header("Location: ./");
+            exit;
+        }
+        $categories = $this->categoryModel->fetch();
+
+        require __DIR__ . '/../../views/admin/product/edit.php';
+    }
+
+    /**
+     * 商品登録の実行
+     */
+    public function add()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            exit;
+        }
+        $posts = $_POST;
+        $id = $this->productModel->insert($posts);
+        if ($id) {
+            header("Location: index.php");
+            exit;
+        } else {
+            echo "登録に失敗しました";
+        }
+    }
+
+    /**
+     * 商品更新の実行
+     */
+    public function update()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            exit;
+        }
+        $posts = $_POST;
+        $result = $this->productModel->update($posts);
+        if ($result) {
+            header("Location: ./");
+            exit;
+        } else {
+            echo "更新に失敗しました";
+        }
     }
 }

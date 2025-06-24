@@ -18,9 +18,9 @@ const LIB_DIR = __DIR__ . "/lib/";
 const COMPONENT_DIR = __DIR__ . "/components/";
 
 // upload image base path
-const IMAGE_BASE = "images/products/";
+const IMAGE_BASE = "images/";
 // upload image dir
-const PRODUCTS_IMAGE_DIR = __DIR__ . IMAGE_BASE;
+const PRODUCTS_IMAGE_DIR = IMAGE_BASE . "products/";
 
 // ライブラリ読み込み
 require_once LIB_DIR . 'Database.php';

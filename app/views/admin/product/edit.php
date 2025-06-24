@@ -3,30 +3,32 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>商品登録フォーム</title>
+    <title>商品編集</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <base href="<?= BASE_URL ?>">
 </head>
 
 <body class="bg-gray-100 p-8">
-
     <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
-        <h1 class="text-2xl font-bold mb-4">商品登録</h1>
+        <h1 class="text-center text-2xl font-bold mb-4">商品編集</h1>
 
-        <form action="admin/product/add.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="admin/product/update.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($product['id']) ?>">
+
             <div>
                 <label for="name" class="block text-sm font-semibold">商品名</label>
                 <input type="text" name="name" id="name" required
+                    value="<?= htmlspecialchars($product['name']) ?>"
                     class="w-full border px-3 py-2 rounded" />
             </div>
 
             <div>
                 <label for="category_id" class="block text-sm font-semibold">カテゴリ</label>
-                <select name="category_id" id="category_id" required
-                    class="w-full border px-3 py-2 rounded">
+                <select name="category_id" id="category_id" required class="w-full border px-3 py-2 rounded">
                     <option value="">選択してください</option>
                     <?php foreach ($categories as $cat): ?>
-                        <option value="<?= htmlspecialchars($cat['id']) ?>">
+                        <option value="<?= htmlspecialchars($cat['id']) ?>"
+                            <?= $cat['id'] == $product['category_id'] ? 'selected' : '' ?>>
                             <?= htmlspecialchars($cat['name']) ?>
                         </option>
                     <?php endforeach; ?>
@@ -36,21 +38,25 @@
             <div>
                 <label for="price" class="block text-sm font-semibold">価格（円）</label>
                 <input type="number" name="price" id="price" min="0" required
+                    value="<?= htmlspecialchars($product['price']) ?>"
                     class="w-full border px-3 py-2 rounded" />
             </div>
 
             <div>
-                <label for="image" class="block text-sm font-semibold">画像ファイル</label>
+                <label for="image" class="block text-sm font-semibold">画像ファイル（変更しない場合はそのまま）</label>
                 <input type="file" name="image" id="image" accept="image/*"
                     class="w-full border px-3 py-2 rounded" />
+                <?php if (!empty($product['image_path'])): ?>
+                    <img src="<?= htmlspecialchars($product['image_path']) ?>" alt="現在の画像" class="w-32 mt-2 rounded">
+                <?php endif; ?>
             </div>
 
             <div class="flex justify-between items-center mt-4">
                 <button type="submit"
                     class="bg-sky-600 text-white px-4 py-2 rounded hover:bg-sky-700">
-                    登録
+                    更新
                 </button>
-                <a href="./" class="inline border border-sky-600 text-sky-600 px-4 py-2 rounded">戻る</a>
+                <a href="admin/product/" class="inline border border-sky-600 text-sky-600 px-4 py-2 rounded">戻る</a>
             </div>
         </form>
     </div>
