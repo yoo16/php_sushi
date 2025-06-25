@@ -15,11 +15,20 @@
             </a>
         </div>
 
-        <div class="mb-4">
-            <a href="admin/product/" class="px-3 py-1">すべて</a>
+        <div class="mb-4 flex gap-2">
+            <!-- 「すべて」リンク -->
+            <a href="admin/product/"
+                class="px-3 py-1 rounded 
+                <?= (!$category_id) ? 'bg-sky-600 text-white' : '' ?>">
+                すべて
+            </a>
+
+            <!-- カテゴリごとのリンク -->
             <?php foreach ($category_names as $id => $name): ?>
-                <a href="admin/product/?category_id=<?= $id ?>" class="px-3 py-1">
-                    <?= $name ?>
+                <a href="admin/product/?category_id=<?= $id ?>"
+                    class="px-3 py-1 rounded 
+                    <?= $category_id == $id ? 'bg-sky-600 text-white' : '' ?>">
+                    <?= htmlspecialchars($name) ?>
                 </a>
             <?php endforeach; ?>
         </div>

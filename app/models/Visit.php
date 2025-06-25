@@ -18,6 +18,23 @@ class Visit
     }
 
     /**
+     * 来店セッションの一覧を取得
+     *
+     * @return array 来店セッションの連想配列
+     */
+    public function fetch()
+    {
+        try {
+            $sql = "SELECT * FROM visits ORDER BY updated_at DESC";
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return [];
+        }
+    }
+
+    /**
      * 指定されたIDの来店セッションを取得
      * @param int $id
      * @return array|null
@@ -120,5 +137,4 @@ class Visit
             return false;
         }
     }
-
 }

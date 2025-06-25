@@ -3,11 +3,11 @@
 
 <?php include VIEW_DIR . 'components/head.php' ?>
 
-<body class="bg-gray-100">
+<body class="bg-gray-50">
     <?php include VIEW_DIR . 'components/admin_nav.php' ?>
 
     <main class="max-w-xl mx-auto bg-white p-6 rounded shadow">
-        <h1 class="text-2xl font-bold mb-4">カテゴリ-編集</h1>
+        <h1 class="text-2xl text-center font-bold mb-4">カテゴリ-編集</h1>
 
         <form action="admin/category/update.php" method="POST" enctype="multipart/form-data" class="space-y-4">
             <input type="hidden" name="id" value="<?= $category['id'] ?? '' ?>">

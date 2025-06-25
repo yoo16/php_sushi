@@ -3,7 +3,7 @@
 const DB_CONNECTION = 'mysql';
 const DB_HOST = 'mysql';
 const DB_PORT = 3306;
-const DB_DATABASE = 'sushi';
+const DB_DATABASE = 'haru_sushi';
 const DB_USERNAME = 'root';
 const DB_PASSWORD = 'root';
 

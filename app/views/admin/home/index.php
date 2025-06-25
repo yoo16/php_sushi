@@ -3,7 +3,7 @@
 
 <?php include VIEW_DIR . 'components/head.php' ?>
 
-<body class="bg-gray-100">
+<body class="bg-gray-50">
     <?php include VIEW_DIR . 'components/admin_nav.php' ?>
 
     <main class="mx-auto bg-white p-6 rounded shadow">
