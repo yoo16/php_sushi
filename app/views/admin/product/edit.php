@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 
-<head>
-    <meta charset="UTF-8">
-    <title>商品編集</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <base href="<?= BASE_URL ?>">
-</head>
+<?php include VIEW_DIR . 'components/head.php' ?>
 
 <body class="bg-gray-100 p-8">
     <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">

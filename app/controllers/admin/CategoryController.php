@@ -18,13 +18,23 @@ class CategoryController
     public function index()
     {
         $categories = $this->categoryModel->fetch();
-        require __DIR__ . '/../../views/admin/category/index.php';
+        require VIEW_DIR . 'admin/category/index.php';
     }
 
     public function create()
     {
-        $categories = $this->categoryModel->fetch();
-        require __DIR__ . '/../../views/admin/product/create.php';
+        require VIEW_DIR . 'admin/category/create.php';
+    }
+
+    public function edit()
+    {
+        $categoryModel = new Category();
+        if (!isset($_GET['id'])) {
+            exit;
+        }
+        $id = $_GET['id'];
+        $category = $categoryModel->find($id);
+        require VIEW_DIR . 'admin/category/edit.php';
     }
 
     public function add()
@@ -33,13 +43,23 @@ class CategoryController
             exit;
         }
         $posts = $_POST;
-        $id = $this->categoryModel->insert($posts);
+        $categoryModel = new Category();
+        $id = $categoryModel->insert($posts);
         if ($id) {
-            header("Location: index.php?success=1");
+            header("Location: ./");
             exit;
         } else {
-            echo "登録に失敗しました";
+            header("Location: create.php");
+            exit;
         }
+    }
+
+    public function delete()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            exit;
+        }
+        $this->categoryModel->delete($_POST['id']);
         header("Location: ./");
     }
 }

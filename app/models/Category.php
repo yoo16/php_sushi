@@ -77,8 +77,8 @@ class Category
     public function insert($data)
     {
         try {
-            $sql = "INSERT INTO categories (name, category_id, image_path) 
-                    VALUES (:name, :category_id, :image_path)";
+            $sql = "INSERT INTO categories (name, sort_order) 
+                    VALUES (:name, :sort_order)";
 
             $stmt = $this->pdo->prepare($sql);
             $result = $stmt->execute($data);

@@ -11,13 +11,16 @@
         <form action="admin/category/add.php" method="POST" enctype="multipart/form-data" class="space-y-4">
             <div>
                 <label for="name" class="block text-sm font-semibold">カテゴリ名</label>
-                <input type="text" name="name" id="name" required
+                <input type="text" name="name" id="name"
+                    value="<?= $category['name'] ?? '' ?>"
+                    required
                     class="w-full border px-3 py-2 rounded" />
             </div>
 
             <div>
                 <label for="sort_order" class="block text-sm font-semibold">並び順</label>
-                <input type="number" name="sort_order" id="sort_order" min="0" 
+                <input type="number" name="sort_order" id="sort_order" min="0"
+                    value="<?= $category['sort_order'] ?? '' ?>"
                     class="w-full border px-3 py-2 rounded" />
             </div>
 
@@ -28,6 +31,14 @@
                 </button>
                 <a href="admin/category/" class="inline border border-sky-600 text-sky-600 px-4 py-2 rounded">戻る</a>
             </div>
+        </form>
+        <form action="admin/category/delete.php" method="POST" class="mt-4">
+            <input type="hidden" name="id" value="<?= $category['id'] ?? '' ?>">
+            <button type="submit"
+                onclick="return confirm('本当に削除しますか？');"
+                class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                削除
+            </button>
         </form>
     </div>
 </body>

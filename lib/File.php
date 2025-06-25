@@ -31,12 +31,10 @@ class File
         if (isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK) {
             // アップロードされたファイルの情報を取得
             $tmpPath = $_FILES[$key]['tmp_name'];
-            // 画像の拡張子を取得
-            $extension = pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION);
             // 画像ファイル名を指定
-            if ($fileName) {
-                $fileName .= ".{$extension}";
-            } else {
+            if (!$fileName) {
+                // 画像の拡張子を取得
+                $extension = pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION);
                 $fileName = uniqid() . '.' . $extension;
             }
             // アップロード先のディレクトリを指定

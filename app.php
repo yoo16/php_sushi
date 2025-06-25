@@ -12,6 +12,8 @@ const TAX_RATE = 0.1; // 消費税率
 const BASE_DIR = __DIR__;
 // app/ ディレクトリパス
 const APP_DIR = __DIR__ . "/app/";
+// views/ ディレクトリパス
+const VIEW_DIR = APP_DIR . "/views/";
 // lib/ ディレクトリパス
 const LIB_DIR = __DIR__ . "/lib/";
 // components/ ディレクトリパス

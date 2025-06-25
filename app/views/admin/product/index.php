@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>商品一覧</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <base href="<?= BASE_URL ?>">
-</head>
+
+<?php include VIEW_DIR . 'components/head.php' ?>
+
 <body class="bg-gray-50 p-8">
     <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow">
         <h1 class="text-2xl text-center font-bold mb-4">商品一覧</h1>
