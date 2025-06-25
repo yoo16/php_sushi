@@ -3,8 +3,10 @@
 
 <?php include VIEW_DIR . 'components/head.php' ?>
 
-<body class="bg-gray-100 p-8">
-    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+<body class="bg-gray-100">
+    <?php include VIEW_DIR . 'components/admin_nav.php' ?>
+
+    <main class="max-w-xl mx-auto bg-white p-6 rounded shadow">
         <h1 class="text-2xl font-bold mb-4">カテゴリ一覧</h1>
 
         <div class="mb-4 text-right">
@@ -35,7 +37,7 @@
                 </tbody>
             </table>
         <?php endif; ?>
-    </div>
+    </main>
 </body>
 
 </html>

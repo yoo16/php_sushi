@@ -14,8 +14,6 @@ class ProductController
 
     public function __construct()
     {
-        $this->productModel = new Product();
-        $this->categoryModel = new Category();
     }
 
     /**
@@ -25,10 +23,13 @@ class ProductController
      */
     public function index()
     {
-        $products = $this->productModel->fetch();
-        $category_names = $this->categoryModel->map();
+        $productModel = new Product();
+        $products = $productModel->fetch();
 
-        require __DIR__ . '/../../views/admin/product/index.php';
+        $categoryModel = new Category();
+        $category_names = $categoryModel->map();
+
+        require VIEW_DIR . 'admin/product/index.php';
     }
 
     /**
@@ -38,9 +39,10 @@ class ProductController
      */
     public function create()
     {
-        $categories = $this->categoryModel->fetch();
+        $categoryModel = new Category();
+        $categories = $categoryModel->fetch();
 
-        require __DIR__ . '/../../views/admin/product/create.php';
+        require VIEW_DIR . 'admin/product/create.php';
     }
 
     /**
@@ -51,14 +53,16 @@ class ProductController
     public function edit()
     {
         $id = $_GET['id'] ?? null;
-        $product = $this->productModel->find($id);
+        $productModel = new Product();
+        $product = $productModel->find($id);
         if (!$product) {
             header("Location: ./");
             exit;
         }
-        $categories = $this->categoryModel->fetch();
+        $categoryModel = new Category();
+        $categories = $categoryModel->fetch();
 
-        require __DIR__ . '/../../views/admin/product/edit.php';
+        require VIEW_DIR . 'admin/product/edit.php';
     }
 
     /**
@@ -70,13 +74,9 @@ class ProductController
             exit;
         }
         $posts = $_POST;
-        $id = $this->productModel->insert($posts);
-        if ($id) {
-            header("Location: index.php");
-            exit;
-        } else {
-            echo "登録に失敗しました";
-        }
+        $productModel = new Product();
+        $id = $productModel->insert($posts);
+        header("Location: index.php");
     }
 
     /**
@@ -88,12 +88,25 @@ class ProductController
             exit;
         }
         $posts = $_POST;
-        $result = $this->productModel->update($posts);
+        $productModel = new Product();
+        $result = $productModel->update($posts);
         if ($result) {
             header("Location: ./");
             exit;
         } else {
-            echo "更新に失敗しました";
+            header("Location: edit.php?id=" . $posts['id']);
+            exit;
         }
+    }
+
+
+    public function delete()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            exit;
+        }
+        $productModel = new Product();
+        $productModel->delete($_POST['id']);
+        header("Location: ./");
     }
 }

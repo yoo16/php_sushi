@@ -3,12 +3,14 @@
 
 <?php include VIEW_DIR . 'components/head.php' ?>
 
-<body class="bg-gray-100 p-8">
+<body class="bg-gray-100">
+    <?php include VIEW_DIR . 'components/admin_nav.php' ?>
 
-    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+    <main class="max-w-xl mx-auto bg-white p-6 rounded shadow">
         <h1 class="text-2xl font-bold mb-4">カテゴリ-編集</h1>
 
-        <form action="admin/category/add.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="admin/category/update.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+            <input type="hidden" name="id" value="<?= $category['id'] ?? '' ?>">
             <div>
                 <label for="name" class="block text-sm font-semibold">カテゴリ名</label>
                 <input type="text" name="name" id="name"
@@ -40,7 +42,7 @@
                 削除
             </button>
         </form>
-    </div>
+    </main>
 </body>
 
 </html>

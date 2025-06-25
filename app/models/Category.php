@@ -91,6 +91,21 @@ class Category
         return;
     }
 
+    public function update($data)
+    {
+        try {
+            $sql = "UPDATE categories 
+                    SET name = :name, sort_order = :sort_order 
+                    WHERE id = :id";
+            $stmt = $this->pdo->prepare($sql);
+            $result = $stmt->execute($data);
+            return $result;
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+        }
+        return;
+    }
+
     /**
      * データ削除
      *

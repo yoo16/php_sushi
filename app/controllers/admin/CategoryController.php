@@ -12,12 +12,13 @@ class CategoryController
 
     public function __construct()
     {
-        $this->categoryModel = new Category();
+
     }
 
     public function index()
     {
-        $categories = $this->categoryModel->fetch();
+        $categoryModel = new Category();
+        $categories = $categoryModel->fetch();
         require VIEW_DIR . 'admin/category/index.php';
     }
 
@@ -54,12 +55,31 @@ class CategoryController
         }
     }
 
+    public function update()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            exit;
+        }
+        $posts = $_POST;
+        $categoryModel = new Category();
+        $result = $categoryModel->update($posts);
+        if ($result) {
+            header("Location: ./");
+            exit;
+        } else {
+            header("Location: edit.php?id=" . $posts['id']);
+            exit;
+        }
+    }
+
+
     public function delete()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             exit;
         }
-        $this->categoryModel->delete($_POST['id']);
+        $categoryModel = new Category();
+        $categoryModel->delete($_POST['id']);
         header("Location: ./");
     }
 }

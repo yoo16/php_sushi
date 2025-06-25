@@ -3,9 +3,10 @@
 
 <?php include VIEW_DIR . 'components/head.php' ?>
 
-<body class="bg-gray-100 p-8">
+<body class="bg-gray-100">
+    <?php include VIEW_DIR . 'components/admin_nav.php' ?>
 
-    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+    <main class="max-w-xl mx-auto bg-white p-6 rounded shadow">
         <h1 class="text-2xl font-bold mb-4">商品登録</h1>
 
         <form action="admin/product/add.php" method="POST" enctype="multipart/form-data" class="space-y-4">
@@ -45,10 +46,10 @@
                     class="bg-sky-600 text-white px-4 py-2 rounded hover:bg-sky-700">
                     登録
                 </button>
-                <a href="./" class="inline border border-sky-600 text-sky-600 px-4 py-2 rounded">戻る</a>
+                <a href="admin/product/" class="inline border border-sky-600 text-sky-600 px-4 py-2 rounded">戻る</a>
             </div>
         </form>
-    </div>
+    </main>
 </body>
 
 </html>
