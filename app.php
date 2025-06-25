@@ -38,8 +38,11 @@ require_once APP_DIR . 'models/Order.php';
 
 // コントローラークラスの読み込み
 require_once APP_DIR . 'controllers/HomeController.php';
+
+require_once APP_DIR . 'controllers/admin/HomeController.php';
 require_once APP_DIR . 'controllers/admin/CategoryController.php';
 require_once APP_DIR . 'controllers/admin/ProductController.php';
+require_once APP_DIR . 'controllers/admin/VisitController.php';
 
 if (!defined('BASE_URL')) define('BASE_URL', getBaseUrl());
 

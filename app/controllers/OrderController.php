@@ -10,7 +10,7 @@ class OrderController
     public function index()
     {
         // ビューを読み込む
-        require __DIR__ . '/../../views/order/index.php';
+        require VIEW_DIR . 'order/index.php';
     }
 
     /**
@@ -21,6 +21,6 @@ class OrderController
      */
     public function show($orderId)
     {
-        require __DIR__ . '/../../views/order/show.php';
+        require VIEW_DIR . 'order/show.php';
     }
 }

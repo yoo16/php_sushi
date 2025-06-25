@@ -48,28 +48,24 @@ class Product
      * @param int $category_id カテゴリーID
      * @return array|null 
      */
-    public function fetchByCategoryId($category_id, $limit = 50)
+    // App/Models/Product.php
+
+    public function fetchByCategoryId($category_id)
     {
         try {
             $sql = "SELECT * FROM products 
-                JOIN categories ON products.category_id = categories.id
-                ORDER BY categories.id ASC 
-                WHERE products.category_id = :category_id
-                LIMIT :limit;";
-
+                    WHERE category_id = :category_id";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([
-                'category_id' => $category_id,
-                'limit' => $limit
-            ]);
-            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $products;
+            $stmt->bindValue(':category_id', $category_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll();
         } catch (PDOException $e) {
             error_log($e->getMessage());
             echo ($e->getMessage());
             return null;
         }
     }
+
 
     /**
      * IDでデータ取得
@@ -116,7 +112,7 @@ class Product
         return;
     }
 
-        /**
+    /**
      * データをDBに登録する
      *
      * @param array $data

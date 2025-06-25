@@ -40,6 +40,13 @@ class Category
         }
     }
 
+    /**
+     * データをキーとカラムでマッピング
+     * 
+     * @param string $key キーとして使用するカラム名
+     * @param string $column マッピングするカラム名
+     * @return array マッピングされた連想配列
+     */
     public function map($key = "id", $column = "name")
     {
         $categories = $this->fetch();
@@ -91,6 +98,12 @@ class Category
         return;
     }
 
+    /**
+     * データ更新
+     *
+     * @param array $data 更新するデータ
+     * @return mixed 更新成功時は true、失敗時は null
+     */
     public function update($data)
     {
         try {
