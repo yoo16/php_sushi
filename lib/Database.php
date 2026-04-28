@@ -1,4 +1,10 @@
 <?php
+
+namespace Lib;
+
+use PDO;
+use PDOException;
+
 class Database
 {
     private static $instance = null;
@@ -6,7 +12,7 @@ class Database
 
     private function __construct()
     {
-        $dsn = "mysql:dbname=" . DB_DATABASE . ";host=" . DB_HOST . ";charset=utf8;port=" . DB_PORT;
+        $dsn = "mysql:dbname=" . DB_DATABASE . ";host=" . DB_HOST . ";charset=" . DB_CHARSET . ";port=" . DB_PORT;
         try {
             $this->pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
