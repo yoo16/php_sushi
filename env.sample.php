@@ -1,11 +1,12 @@
 <?php
 // Database
 const DB_CONNECTION = 'mysql';
-const DB_HOST = 'mysql';
+const DB_HOST = 'localhost';
 const DB_PORT = 3306;
 const DB_DATABASE = 'haru_sushi';
 const DB_USERNAME = 'root';
-const DB_PASSWORD = 'root';
+const DB_PASSWORD = '';
+const DB_CHARSET = 'utf8mb4';
 
 // アプリキー（セッションキー兼用）
 const APP_KEY = "haru_sushi";

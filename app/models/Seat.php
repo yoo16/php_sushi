@@ -4,7 +4,7 @@ namespace App\Models;
 
 use PDO;
 use PDOException;
-use Database;
+use Lib\Database;
 
 class Seat
 {

@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\Seat;
 use App\Models\Visit;
 use App\Models\Order;
+use Lib\Database;
+
 class HomeController
 {
     public function __construct() {}
